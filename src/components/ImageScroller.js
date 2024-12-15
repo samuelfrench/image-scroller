@@ -7,17 +7,23 @@ const ImageScroller = ({ board, thread }) => {
     const [hasMore, setHasMore] = useState(true);
 
     useEffect(() => {
-        const fetchImages = async () => {
+        const fetchAllImages = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/images?board=${board}&thread=${thread}`);
-                const imageUrls = await response.json();
-                setImages(imageUrls);
+            const response = await fetch(`http://localhost:3001/thread-numbers?board=${board}`);
+            const threadNumbers = await response.json();
+            let allImages = [];
+            for (const threadNumber of threadNumbers) {
+                const threadResponse = await fetch(`http://localhost:3001/images?board=${board}&thread=${threadNumber}`);
+                const threadImages = await threadResponse.json();
+                allImages = [...allImages, ...threadImages];
+            }
+            setImages(allImages);
             } catch (error) {
-                console.error("Failed to fetch images:", error);
+                console.error("Failed to fetch all images:", error);
             }
         };
 
-        fetchImages();
+        fetchAllImages();
     }, [board, thread]);
 
     const fetchMoreData = () => {

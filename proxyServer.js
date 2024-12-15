@@ -31,6 +31,18 @@ app.get('/image', async (req, res) => {
   }
 });
 
+app.get('/thread-numbers', async (req, res) => {
+  const { board } = req.query;
+  try {
+    const response = await axios.get(`https://a.4cdn.org/${board}/catalog.json`);
+    const threadNumbers = response.data.flatMap(page => page.threads.map(thread => thread.no));
+    res.json(threadNumbers);
+  } catch (error) {
+    console.error('Error fetching thread numbers:', error);
+    res.status(500).send('Error fetching thread numbers');
+  }
+});
+
 app.listen(port, () => {
   console.log(`Proxy server running at http://localhost:${port}`);
 });
