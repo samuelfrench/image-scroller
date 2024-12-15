@@ -4,7 +4,7 @@ import ImageScroller from './components/ImageScroller';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ImageScroller board="pol" />
+    <ImageScroller />
   </React.StrictMode>,
   document.getElementById('root')
 );
