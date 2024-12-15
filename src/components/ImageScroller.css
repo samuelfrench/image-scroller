@@ -1,16 +1,34 @@
 .image-scroller {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .image-scroller h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-  }
-  
-  .image-scroller p {
-    font-size: 1.2em;
-    margin: 10px 0;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.image-scroller h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.image-scroller label {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.image-scroller select {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.images {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.images img {
+  max-width: 100%;
+  width: 600px; /* Set the maximum width for images */
+  margin-bottom: 20px;
+}
