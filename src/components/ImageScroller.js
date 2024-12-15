@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./ImageScroller.css"; // Style for TikTok-like scroll
 
+// TODO: Test share button
 const ImageScroller = () => {
     const [board, setBoard] = useState('pol');
     const [images, setImages] = useState([]);
@@ -69,6 +70,21 @@ const ImageScroller = () => {
         }
     };
 
+    const handleShare = async (url) => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Check out this image',
+                    url: url
+                });
+            } catch (error) {
+                console.error("Error sharing:", error);
+            }
+        } else {
+            console.log("Web Share API is not supported in your browser.");
+        }
+    };
+
     return (
         <div className="image-scroller">
             <h1>Image Scroller</h1>
@@ -89,7 +105,10 @@ const ImageScroller = () => {
             >
                 <div className="images">
                     {images.map((url, index) => (
-                        <img key={index} src={`http://localhost:3001/image?url=${encodeURIComponent(url)}`} alt={`Image ${index}`} />
+                        <div key={index} className="image-container">
+                            <img key={index} src={`http://localhost:3001/image?url=${encodeURIComponent(url)}`} alt={`Image ${index}`} />
+                            <button onClick={() => handleShare(url)}>Share</button>
+                        </div>
                     ))}
                 </div>
             </InfiniteScroll>
