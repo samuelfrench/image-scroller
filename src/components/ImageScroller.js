@@ -24,7 +24,7 @@ const ImageScroller = ({ board, thread }) => {
         };
 
         fetchAllImages();
-    }, [board, thread]);
+    }, [board]);
 
     const fetchMoreData = () => {
         // For demo purposes, this just replicates data
