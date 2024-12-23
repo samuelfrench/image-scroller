@@ -92,8 +92,8 @@ const ImageScroller = () => {
             <h1>Image Scroller</h1>
             <label htmlFor="board-selector">Select Board: </label>
             <select id="board-selector" value={board} onChange={(e) => setBoard(e.target.value)}>
-                <option value="g">/g/ - Technology</option>
-                <option value="v">/v/ - Video Games</option>
+                <option value="g">Technology</option>
+                <option value="v">Video Games</option>
                 {/* Add more boards as needed */}
             </select>
             <InfiniteScroll
