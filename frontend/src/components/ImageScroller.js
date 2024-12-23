@@ -1,19 +1,21 @@
+// filepath: /home/sam/4chan-image-scroller/frontend/src/components/ImageScroller.js
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "./ImageScroller.css"; // Style for TikTok-like scroll
 
-// TODO: Test share button
 const ImageScroller = () => {
-    const [board, setBoard] = useState('pol');
+    const [board, setBoard] = useState('g');
     const [images, setImages] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const [threadNumbers, setThreadNumbers] = useState([]);
 
+    const API_URL = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const fetchThreadNumbers = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/thread-numbers?board=${board}`);
+                const response = await fetch(`${API_URL}/thread-numbers?board=${board}`);
                 const threads = await response.json();
                 setThreadNumbers(threads);
                 setCurrentPage(0);
@@ -25,7 +27,7 @@ const ImageScroller = () => {
         };
 
         fetchThreadNumbers();
-    }, [board]);
+    }, [board, API_URL]);
 
     useEffect(() => {
         const fetchInitialImages = async () => {
@@ -34,7 +36,7 @@ const ImageScroller = () => {
                     let allImages = [];
                     const threadsToFetch = threadNumbers.slice(0, 5);
                     for (const threadNumber of threadsToFetch) {
-                        const threadResponse = await fetch(`http://localhost:3001/images?board=${board}&thread=${threadNumber}`);
+                        const threadResponse = await fetch(`${API_URL}/images?board=${board}&thread=${threadNumber}`);
                         const threadImages = await threadResponse.json();
                         allImages = [...allImages, ...threadImages];
                     }
@@ -47,7 +49,7 @@ const ImageScroller = () => {
         };
 
         fetchInitialImages();
-    }, [threadNumbers, board]);
+    }, [threadNumbers, board, API_URL]);
 
     const fetchMoreData = async () => {
         if (currentPage * 5 >= threadNumbers.length) {
@@ -59,7 +61,7 @@ const ImageScroller = () => {
             let moreImages = [];
             const threadsToFetch = threadNumbers.slice(currentPage * 5, (currentPage + 1) * 5);
             for (const threadNumber of threadsToFetch) {
-                const threadResponse = await fetch(`http://localhost:3001/images?board=${board}&thread=${threadNumber}`);
+                const threadResponse = await fetch(`${API_URL}/images?board=${board}&thread=${threadNumber}`);
                 const threadImages = await threadResponse.json();
                 moreImages = [...moreImages, ...threadImages];
             }
@@ -90,8 +92,6 @@ const ImageScroller = () => {
             <h1>Image Scroller</h1>
             <label htmlFor="board-selector">Select Board: </label>
             <select id="board-selector" value={board} onChange={(e) => setBoard(e.target.value)}>
-                <option value="pol">/pol/ - Politically Incorrect</option>
-                <option value="b">/b/ - Random</option>
                 <option value="g">/g/ - Technology</option>
                 <option value="v">/v/ - Video Games</option>
                 {/* Add more boards as needed */}
@@ -106,8 +106,7 @@ const ImageScroller = () => {
                 <div className="images">
                     {images.map((url, index) => (
                         <div key={index} className="image-container">
-                            <img key={index} src={`http://localhost:3001/image?url=${encodeURIComponent(url)}`} alt={`Image ${index}`} />
-                            <button onClick={() => handleShare(url)}>Share</button>
+                            <img src={`${API_URL}/image?url=${encodeURIComponent(url)}`} alt={`Image ${index}`} />
                         </div>
                     ))}
                 </div>
